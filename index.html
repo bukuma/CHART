@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <!-- プロパティ名＋文字コード-->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!-- cdn読み込み  ３種類の外部のスクリプト-->
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/draw2d@1.0.38/dist/draw2d.js"></script>
+    <!-- MIMEタイプ/サブタイプ 拡張子-->
+    <script type="text/javascript">
+        //canvas変数に文字列は入っていない≒値が存在しない←変数の初期化で使用
+        let canvas = null;
+        //DOMContentLoaded：HTML ページの読み込みが完了し HTML のパース(解析)が完了して DOM ツリーの構築が完了した時点で発生するイベント
+        //addEventListener メソッドの引数として DOMContentLoaded を指定してイベントリスナーを登録してのみ利用できる
+        document.addEventListener("DOMContentLoaded", function () {
+            //div(bodyに存在）のid="canvas_id"にdraw2d.Canvasが生成される
+            //new演算子:インスタンス(オブジェクトのコピー)を作成する
+            canvas = new draw2d.Canvas("canvas_id");
+
+            //ドラッグ&ドロップで connectionを作成できるようにする
+            //.installEditPolicy()でcanvasに対して様々な設定を付与
+            //DragConnectionCreatePolicy:ドラッグ&ドロップでConnectionを生成できる
+            canvas.installEditPolicy(new draw2d.policy.connection.DragConnectionCreatePolicy({
+                //{}内を実装するための新しいインスタンスを返す
+                createConnection: function () {
+                    //draw2d.Connectionクラスのインスタンスを生成して、戻す
+                    return new draw2d.Connection({
+                        //connectionの形状の設定（設定をしない場合、デフォルトの場合で直線のconnection)
+                        router: new draw2d.layout.connection.InteractiveManhattanConnectionRouter()
+                    })
+                }
+            }));
+        });
+
+        //function　関数名()：様々な処理を1つにまとめて、名前をつけることができる
+        function canvas_redo() {
+            //canvas_redoの処理内容
+            //canvasからgetCommandStack(≒連続処理)指示を受け取ったら、redoイベント（＝元に戻す）を実行
+            canvas.getCommandStack().redo();
+        }
+        function canvas_undo() {
+            //canvas_undoの処理内容
+            //canvasからgetCommandStack(≒連続処理)指示を受け取ったら、undoイベント（＝やり直し）を実行
+            canvas.getCommandStack().undo();
+        }
+        function figure_delete() {
+            //figure_deleteの処理内容
+            //figure:描写領域内のオブジェクト
+            //canvasからgetCommandStack(≒連続処理)指示を受け取ったら、execute() メソッド（＝実行する）を実行
+            canvas.getCommandStack().execute(
+                //execute() メソッドの内容
+                //canvas.getPrimarySelection()で選択中のオブジェクトを取得し、.execute(new ~.CommandDelete()でオブジェクトを削除
+                //PrimarySelection:現在の主要選択オブジェクトであるオブジェクト
+                new draw2d.command.CommandDelete(canvas.getPrimarySelection()));
+        }
+        function label_add() {
+            //label_addの処理内容
+            let label = new draw2d.shape.basic.Label({ text: "テキスト" });
+            //テキストと記されたラベルを生成
+            label.createPort("input");
+            //createPort(~)でportを作成→portは後のConnectionを作成するのに必要
+            label.createPort("output");
+            canvas.getCommandStack().execute(new draw2d.command.CommandAdd(canvas, label, 10, 10));
+            //canvasからgetCommandStack(≒連続処理)指示を受け取ったら、execute() メソッド（＝実行する）を実行
+            //draw2d.command.CommandAdd(canvas, label, 10, 10));で canvasに挿入
+        }
+        function circle_add() {
+            //label_addの処理内容
+            let circle = new draw2d.shape.basic.Circle({ text: "選択肢" });
+            //テキストと記されたラベルを生成
+            circle.createPort("input");
+            //createPort(~)でportを作成→portは後のConnectionを作成するのに必要
+            circle.createPort("output");
+            canvas.getCommandStack().execute(new draw2d.command.CommandAdd(canvas, circle, 10, 10));
+            //canvasからgetCommandStack(≒連続処理)指示を受け取ったら、execute() メソッド（＝実行する）を実行
+            //draw2d.command.CommandAdd(canvas, label, 10, 10));で canvasに挿入
+        }
+        function rectangle_add() {
+            //label_addの処理内容
+            let rectangle = new draw2d.shape.basic.Rectangle({ text: "選択肢" });
+            //テキストと記されたラベルを生成
+            rectangle.createPort("input");
+            //createPort(~)でportを作成→portは後のConnectionを作成するのに必要
+            rectangle.createPort("output");
+            canvas.getCommandStack().execute(new draw2d.command.CommandAdd(canvas, rectangle, 10, 10));
+            //canvasからgetCommandStack(≒連続処理)指示を受け取ったら、execute() メソッド（＝実行する）を実行
+            //draw2d.command.CommandAdd(canvas, label, 10, 10));で canvasに挿入
+        }
+
+    </script>
+</head>
+
+<body id="container">
+    <div style="margin: 10px;">
+        <input type="button" value="undo" onclick="canvas_undo()">
+        <input type="button" value="redo" onclick="canvas_redo()">
+        <input type="button" value="delete" onclick="figure_delete()">
+        <input type="button" value="label_add" onclick="label_add()">
+        <input type="button" value="circle_add" onclick="circle_add()">
+        <input type="button" value="rectangle_add" onclick="rectangle_add()">
+        <!--value:ボタンに表示されるテキスト onclick:クリックした際に起動する処理を指定-->
+    </div>
+    <!--javascriptを使う時はidタグの方が処理が早い＋横並び可能-->
+    <div id="canvas_id" style="width:3000px; height:3000px;background-color: rgb(220, 220, 220);"></div>
+</body>
+
+</html>
