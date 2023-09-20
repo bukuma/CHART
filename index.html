@@ -66,26 +66,26 @@
             //draw2d.command.CommandAdd(canvas, label, 10, 10));で canvasに挿入
         }
         function circle_add() {
-            //label_addの処理内容
-            let circle = new draw2d.shape.basic.Circle({ text: "選択肢" });
-            //テキストと記されたラベルを生成
+            //circle_addの処理内容
+            let circle = new draw2d.shape.basic.Circle();
+            //circleを生成
             circle.createPort("input");
             //createPort(~)でportを作成→portは後のConnectionを作成するのに必要
             circle.createPort("output");
-            canvas.getCommandStack().execute(new draw2d.command.CommandAdd(canvas, circle, 10, 10));
+            canvas.getCommandStack().execute(new draw2d.command.CommandAdd(canvas, circle, 10, 100));
             //canvasからgetCommandStack(≒連続処理)指示を受け取ったら、execute() メソッド（＝実行する）を実行
-            //draw2d.command.CommandAdd(canvas, label, 10, 10));で canvasに挿入
+            //draw2d.command.CommandAdd(canvas, circle, 10, 100));で canvasに挿入
         }
         function rectangle_add() {
-            //label_addの処理内容
-            let rectangle = new draw2d.shape.basic.Rectangle({ text: "選択肢" });
-            //テキストと記されたラベルを生成
+            //rectangle_addの処理内容
+            let rectangle = new draw2d.shape.basic.Rectangle();
+            //rectangleを生成
             rectangle.createPort("input");
             //createPort(~)でportを作成→portは後のConnectionを作成するのに必要
             rectangle.createPort("output");
-            canvas.getCommandStack().execute(new draw2d.command.CommandAdd(canvas, rectangle, 10, 10));
+            canvas.getCommandStack().execute(new draw2d.command.CommandAdd(canvas, rectangle, 100, 10));
             //canvasからgetCommandStack(≒連続処理)指示を受け取ったら、execute() メソッド（＝実行する）を実行
-            //draw2d.command.CommandAdd(canvas, label, 10, 10));で canvasに挿入
+            //draw2d.command.CommandAdd(canvas, rectangle, 100, 10));で canvasに挿入
         }
 
     </script>
