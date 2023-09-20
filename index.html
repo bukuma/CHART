@@ -87,7 +87,12 @@
             //canvasからgetCommandStack(≒連続処理)指示を受け取ったら、execute() メソッド（＝実行する）を実行
             //draw2d.command.CommandAdd(canvas, rectangle, 100, 10));で canvasに挿入
         }
-
+        function diamond_add() {
+            let diamond = new draw2d.shape.basic.Diamond();
+            diamond.createPort("input");
+            diamond.createPort("output");
+            canvas.getCommandStack().execute(new draw2d.command.CommandAdd(canvas, diamond, 100, 100));
+        }
     </script>
 </head>
 
@@ -99,6 +104,7 @@
         <input type="button" value="label_add" onclick="label_add()">
         <input type="button" value="circle_add" onclick="circle_add()">
         <input type="button" value="rectangle_add" onclick="rectangle_add()">
+        <input type="button" value="diamond_add" onclick="diamond_add()">
         <!--value:ボタンに表示されるテキスト onclick:クリックした際に起動する処理を指定-->
     </div>
     <!--javascriptを使う時はidタグの方が処理が早い＋横並び可能-->
