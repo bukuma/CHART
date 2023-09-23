@@ -93,6 +93,20 @@
             diamond.createPort("output");
             canvas.getCommandStack().execute(new draw2d.command.CommandAdd(canvas, diamond, 100, 100));
         }
+        function addComment() {
+            // addCommentの処理内容=ユーザーにコメントを入力してもらうためにプロンプトを表示
+            let commentText = prompt("コメントを入力:");
+            //prompt：ダイアルボックスを開く→コメントを打ち込めるようになる
+            if (commentText !== null) {
+                // コメントが入力された場合の動作→コメントを追加
+                let comment = new draw2d.shape.basic.Label({ text: commentText });
+                //コメント付きのラベルが生成される
+                comment.createPort("input");
+                comment.createPort("output");
+                canvas.getCommandStack().execute(new draw2d.command.CommandAdd(canvas, comment, 200, 200));
+                //キャンバスに要素（コメントの付いたラベル）が追加される
+            }
+        }
     </script>
 </head>
 
@@ -105,6 +119,7 @@
         <input type="button" value="circle_add" onclick="circle_add()">
         <input type="button" value="rectangle_add" onclick="rectangle_add()">
         <input type="button" value="diamond_add" onclick="diamond_add()">
+        <input type="button" value="comment_add" onclick="addComment()">
         <!--value:ボタンに表示されるテキスト onclick:クリックした際に起動する処理を指定-->
     </div>
     <!--javascriptを使う時はidタグの方が処理が早い＋横並び可能-->
